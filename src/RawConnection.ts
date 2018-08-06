@@ -61,8 +61,11 @@ export class RawConnection implements IProxy {
   };
 
   close = () => {
-    return new Promise(resolve => {
-      this.socket.close();
+    return new Promise((resolve, reject) => {
+      if (!this.socket) {
+        reject('The connection was closed');
+      }
+      this.socket!.close();
       this.socket = null;
       this.isAlive = false;
       resolve();
@@ -72,8 +75,11 @@ export class RawConnection implements IProxy {
   isConnected = () => this.isAlive;
 
   send = ({data}: ISendData) => {
-    return new Promise(resolve => {
-      this.socket.send(data);
+    return new Promise((resolve, reject) => {
+      if (!this.socket) {
+        reject('The connection was closed');
+      }
+      this.socket!.send(data);
       resolve();
     });
   };
