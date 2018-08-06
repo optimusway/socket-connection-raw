@@ -11,7 +11,7 @@ export interface ISendData {
 }
 
 export class RawConnection implements IProxy {
-  private socket: WebSocket;
+  private socket: WebSocket | null;
   private isAlive: boolean = false;
   private options: IRawSocketOptions;
 
@@ -47,8 +47,10 @@ export class RawConnection implements IProxy {
       };
 
       this.socket.onmessage = (event: any) => {
-        console.info('Data event was received')
-        const action = this.options.actions.get(event.data.type);
+        const data = JSON.parse(event.data);
+        console.info('Data event was received');
+        const {type} = data;
+        const action = this.options.actions.get(type);
         if (!action) {
           console.info('You should specify this type of action');
         } else {
@@ -61,6 +63,7 @@ export class RawConnection implements IProxy {
   close = () => {
     return new Promise(resolve => {
       this.socket.close();
+      this.socket = null;
       this.isAlive = false;
       resolve();
     });

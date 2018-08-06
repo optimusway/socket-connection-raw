@@ -1,6 +1,6 @@
 {
   "name": "socket-connection-raw",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "scripts": {
     "precommit": "lint-staged",
@@ -8,7 +8,7 @@
     "compile": "tsc --emitDeclarationOnly",
     "build": "tsc -p . && rollup -c",
     "start": "npm run-script compile && npm run-script build",
-    "publish": "yarn build && npm publish"
+    "publish": "yarn build"
   },
   "main": "./dist/bundle/socket-connection-raw.js",
   "module": "./dist/index.js",
