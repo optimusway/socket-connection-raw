@@ -3,6 +3,7 @@ import {IProxy} from "socket-connection";
 export interface IRawSocketOptions {
   url: string;
   protocols: string[];
+  actions: Map<string, any>;
 }
 
 export interface ISendData {
@@ -43,6 +44,16 @@ export class RawConnection implements IProxy {
             `Connection lost, details: [${JSON.stringify(event.reason)}]`
           );
         }
+      };
+
+      this.socket.onmessage = (event: any) => {
+        console.info('Data event was received')
+        const action = this.options.actions.get(event.data.type);
+        if (!action) {
+          console.info('You should specify this type of action');
+        } else {
+          action.callback();
+        }
       }
     });
   };
@@ -62,6 +73,6 @@ export class RawConnection implements IProxy {
       this.socket.send(data);
       resolve();
     });
-  }
+  };
 
 }
