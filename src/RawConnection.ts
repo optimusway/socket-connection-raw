@@ -54,7 +54,7 @@ export class RawConnection implements IProxy {
         if (!action) {
           console.info('You should specify this type of action');
         } else {
-          action.callback();
+          action();
         }
       }
     });
